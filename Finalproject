@@ -1,0 +1,32 @@
+#!/bin/bash
+
+core="/var/www/testing"
+core2="/var/www/testing/old"
+Filextnd="zip"
+
+# If the new directory doesn't exist, create it
+if [ ! -d ${core2} ] ; then
+  mkdir ${core2}
+  echo "New Directory does not already exist. Making a new one"
+fi
+
+for file in $(ls -1 ${core} | grep ".${Filextnd}"); do #finding files with extension zip
+
+  fname=${file%.*} #gets file name
+  nfe=${file#.*} #extension of new file
+  part=${fname#_*}
+  var=${part%-*} 
+  bname=${fname%_*} #files base name
+  dat=${fname#-*} #date of file 
+  newdir="${core2}/${var}" #new path in core2
+  newname="${bname}_${var}_${dat}.${nfe}" #new name = base name +var+date+extn
+
+  if [ ! -d ${newdir} ]; then #see if dir exists and make new dir
+    mkdir ${newdir}
+    echo "Creating directory ${newdir}"
+  fi
+  
+  mv ${core}/${file} ${newdir}/${newdir}/${newname}"
+  echo "Moving ${core}/${file} to ${newdir}/${newname}" #moving the file
+
+done
